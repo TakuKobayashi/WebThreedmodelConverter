@@ -1,5 +1,5 @@
-import {Component} from 'react'
-import { Engine, Scene, SceneLoader, ArcRotateCamera, Vector3, DirectionalLight } from "@babylonjs/core";
+import { Component } from 'react'
+import { Engine, Scene, SceneLoader, ArcRotateCamera, Vector3, DirectionalLight } from '@babylonjs/core'
 
 import 'babylon-vrm-loader'
 const path = require('path')
@@ -15,38 +15,38 @@ export class BabylonScene extends Component<{}, {}> {
   componentDidMount() {}
 
   private async loadVRM(url: string): Promise<void> {
-    if(!this.scene){
-      return;
+    if (!this.scene) {
+      return
     }
     const dirname = path.dirname(url)
     const filename = path.basename(url)
     console.log(dirname)
     console.log(filename)
-    const loadScene = await SceneLoader.AppendAsync(dirname + "/", filename,  this.scene)
+    const loadScene = await SceneLoader.AppendAsync(dirname + '/', filename, this.scene)
   }
 
   private initScene(canvas: HTMLCanvasElement) {
     if (!canvas) {
       return
     }
-    const engine = new Engine(canvas, true);
+    const engine = new Engine(canvas, true)
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     this.canvas = canvas
-    const scene = new Scene(engine);
+    const scene = new Scene(engine)
     engine.runRenderLoop(() => {
-      scene.render();
-    });
+      scene.render()
+    })
     window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      engine.resize();
-    });
-    this.scene = scene;
-    const camera = new ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2, 3, new Vector3(0, 1, 0), scene);
-    camera.attachControl(canvas, true);
-    const light = new DirectionalLight("light", new Vector3(0, -1, 0), scene);
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+      engine.resize()
+    })
+    this.scene = scene
+    const camera = new ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 2, 3, new Vector3(0, 1, 0), scene)
+    camera.attachControl(canvas, true)
+    const light = new DirectionalLight('light', new Vector3(0, -1, 0), scene)
 
     this.loadVRM('https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm')
   }
@@ -55,8 +55,7 @@ export class BabylonScene extends Component<{}, {}> {
     this.initScene(canvas)
   }
 
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
   render() {
     return (
