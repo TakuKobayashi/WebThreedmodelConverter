@@ -6,13 +6,30 @@ const path = require('path')
 
 export class BabylonScene extends Component<{}, {}> {
   private canvas: HTMLCanvasElement | null = null
+  private engine: Engine | null = null
   private scene: Scene | null = null
 
   constructor(props: any) {
     super(props)
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    window.addEventListener('resize', this.onResizeWindow)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResizeWindow)
+  }
+
+  onResizeWindow = () => {
+    if (this.canvas) {
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
+    }
+    if (this.engine) {
+      this.engine.resize()
+    }
+  }
 
   private async loadVRM(url: string): Promise<void> {
     if (!this.scene) {
@@ -20,8 +37,6 @@ export class BabylonScene extends Component<{}, {}> {
     }
     const dirname = path.dirname(url)
     const filename = path.basename(url)
-    console.log(dirname)
-    console.log(filename)
     const loadScene = await SceneLoader.AppendAsync(dirname + '/', filename, this.scene)
   }
 
@@ -38,11 +53,7 @@ export class BabylonScene extends Component<{}, {}> {
     engine.runRenderLoop(() => {
       scene.render()
     })
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      engine.resize()
-    })
+    this.engine = engine
     this.scene = scene
     const camera = new ArcRotateCamera('camera', -Math.PI / 2, Math.PI / 2, 3, new Vector3(0, 1, 0), scene)
     camera.attachControl(canvas, true)
