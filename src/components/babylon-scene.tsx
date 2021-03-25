@@ -66,8 +66,6 @@ export class BabylonScene extends Component<{}, {}> {
     this.initScene(canvas)
   }
 
-  componentWillUnmount() {}
-
   render() {
     return (
       <div>
