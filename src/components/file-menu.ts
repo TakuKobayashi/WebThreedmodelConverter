@@ -1,6 +1,5 @@
 import { Component, MouseEvent, SyntheticEvent } from 'react'
 import { Button, Typography, IconButton, Toolbar, AppBar, FormControl, NativeSelect } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
 import { fade, WithStyles, withStyles, createStyles, Theme } from '@material-ui/core/styles'
 import { DropzoneDialog } from 'material-ui-dropzone'
 
@@ -11,12 +10,6 @@ const styles = (theme: Theme) =>
     },
     menuButton: {
       marginRight: theme.spacing(2)
-    },
-    title: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block'
-      }
     },
     uploadFileStyle: {
       marginLeft: theme.spacing(4)
@@ -69,7 +62,7 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
     })
   }
 
-  handleUploadDialog(event: SyntheticEvent) {
+  handleUploadDialog(event: SyntheticEvent<Element, Event>) {
     this.setState({
       uploadModalOpen: !this.state.uploadModalOpen
     })
@@ -88,9 +81,6 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
       <div>
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
             <div className={classes.uploadFileStyle}>
               <Button variant="contained" color="secondary" onClick={this.handleUploadDialog}>
                 FileUpload
@@ -122,6 +112,7 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
           open={this.state.uploadModalOpen}
           onSave={this.handlnUploadFile}
           showPreviews={true}
+          filesLimit={1}
           maxFileSize={10000000000}
           onClose={this.handleUploadDialog}
         />
