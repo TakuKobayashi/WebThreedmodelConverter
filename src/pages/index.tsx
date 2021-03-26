@@ -10,6 +10,7 @@ import { ThreeScene } from '../components/three-scene'
 
 const IndexPage = () => {
   const [threedUrl, setThreedUrl] = useState('')
+  const [exportFileFormat, setExportFileFormat] = useState('')
 
   const fileUploadHandle = (files: File[]) => {
     console.log(files)
@@ -18,9 +19,13 @@ const IndexPage = () => {
     }
   }
 
+  const exportFileHandle = (fileFormat: string) => {
+    console.log(fileFormat)
+  }
+
   return (
     <IndexLayout>
-      <FileMenu onUploadFile={fileUploadHandle} />
+      <FileMenu onUploadFile={fileUploadHandle} onExport={exportFileHandle}/>
       <ThreeScene url={threedUrl} />
     </IndexLayout>
   )

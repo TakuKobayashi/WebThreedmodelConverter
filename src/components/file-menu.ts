@@ -40,7 +40,8 @@ interface FileMenuState {
 }
 
 interface FileMenuProps extends WithStyles<typeof styles> {
-  onUploadFile: (files: File[]) => void
+  onUploadFile: (files: File[]) => void,
+  onExport: (fileFormat: string) => void
 }
 
 class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
@@ -75,6 +76,11 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
     })
   }
 
+  handleExport(event: SyntheticEvent) {
+    const exportFileFormat = this.state.fileFormat;
+    this.props.onExport(exportFileFormat);
+  }
+
   render() {
     const { classes } = this.props
     return (
@@ -102,7 +108,7 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
               </FormControl>
             </div>
             <div className={classes.sectionDesktop}>
-              <Button variant="contained" color="secondary">
+              <Button variant="contained" color="secondary" onClick={this.handleExport}>
                 Export
               </Button>
             </div>
