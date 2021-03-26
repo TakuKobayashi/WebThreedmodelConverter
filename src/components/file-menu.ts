@@ -54,6 +54,8 @@ class FileMenuComponent extends Component<FileMenuProps, FileMenuState> {
 
     this.handlnUploadFile = this.handlnUploadFile.bind(this)
     this.handleUploadDialog = this.handleUploadDialog.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleExport = this.handleExport.bind(this)
   }
 
   handlnUploadFile(files: File[], event: SyntheticEvent<Element, Event>) {

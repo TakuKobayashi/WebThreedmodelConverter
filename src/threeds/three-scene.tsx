@@ -3,24 +3,20 @@ import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color } from
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { VRM } from '@pixiv/three-vrm'
-
-interface LoadURLProps {
-  url: string
-}
-
-export class ThreeScene extends React.Component<LoadURLProps, {}> {
-  private canvas: HTMLCanvasElement | null = null
+export class ThreeScene {
+  private canvas: HTMLCanvasElement
   private scene: Scene | null = null
   private camera: PerspectiveCamera | null = null
   private renderer: WebGLRenderer | null = null
   private frameId: number | null = null
 
-  constructor(props: LoadURLProps) {
-    super(props)
+  constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas
     this.animate = this.animate.bind(this)
+    this.initScene();
   }
 
-  private loadVRM(url: string) {
+  loadVRM(url: string) {
     const gltfLoader = new GLTFLoader()
     gltfLoader.load(
       url,
@@ -40,14 +36,14 @@ export class ThreeScene extends React.Component<LoadURLProps, {}> {
     )
   }
 
-  private initScene(canvas: HTMLCanvasElement) {
-    if (!canvas) {
-      return
-    }
-    const renderer = new WebGLRenderer({ canvas: canvas, antialias: true })
-    const width = canvas.clientWidth
-    const height = canvas.clientHeight
-    this.canvas = canvas
+  exportFile(fileType: string){
+
+  }
+
+  private initScene() {
+    const renderer = new WebGLRenderer({ canvas: this.canvas, antialias: true })
+    const width = this.canvas.clientWidth
+    const height = this.canvas.clientHeight
     const scene = new Scene()
     scene.background = new Color(0x212121)
 
@@ -68,18 +64,14 @@ export class ThreeScene extends React.Component<LoadURLProps, {}> {
     this.animate()
   }
 
-  onCanvasLoaded = (canvas: HTMLCanvasElement) => {
-    this.initScene(canvas)
-  }
-
-  componentWillUnmount() {
+  clear() {
     cancelAnimationFrame(this.frameId!)
     if (this.canvas && this.renderer) {
       this.canvas.removeChild(this.renderer.domElement)
     }
   }
 
-  animate() {
+  private animate() {
     // 次のフレームを要求
     this.frameId = window.requestAnimationFrame(this.animate)
     if (this.renderer && this.scene && this.camera) {
