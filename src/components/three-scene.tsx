@@ -4,26 +4,28 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { VRM } from '@pixiv/three-vrm'
 
-export class ThreeScene extends React.Component<{}, {}> {
+interface LoadURLProps {
+  url: string
+}
+
+export class ThreeScene extends React.Component<LoadURLProps, {}> {
   private canvas: HTMLCanvasElement | null = null
   private scene: Scene | null = null
   private camera: PerspectiveCamera | null = null
   private renderer: WebGLRenderer | null = null
   private frameId: number | null = null
 
-  constructor(props: any) {
+  constructor(props: LoadURLProps) {
     super(props)
     this.animate = this.animate.bind(this)
   }
-
-  componentDidMount() {}
 
   private loadVRM(url: string) {
     const gltfLoader = new GLTFLoader()
     gltfLoader.load(
       url,
-      gltf => {
-        VRM.from(gltf).then(vrm => {
+      (gltf: Scene) => {
+        VRM.from(gltf).then((vrm: VRM) => {
           if (this.scene) {
             this.scene.add(vrm.scene)
           }
@@ -63,7 +65,6 @@ export class ThreeScene extends React.Component<{}, {}> {
     renderer.setSize(width, height)
     renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer = renderer
-    this.loadVRM('https://taptappun.s3-ap-northeast-1.amazonaws.com/test/AliciaSolid.vrm')
     this.animate()
   }
 
@@ -87,6 +88,10 @@ export class ThreeScene extends React.Component<{}, {}> {
   }
 
   render() {
+    const loadVrmUrl = this.props.url
+    if (loadVrmUrl) {
+      this.loadVRM(loadVrmUrl)
+    }
     return (
       <div>
         <canvas style={{ width: '80vw', height: '40vw' }} ref={this.onCanvasLoaded} />
